@@ -93,11 +93,18 @@
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach((item) => {
     const btn = item.querySelector('.faq-q');
-    btn?.addEventListener('click', () => {
+    if (!btn) return;
+    btn.setAttribute('aria-expanded', String(item.classList.contains('open')));
+    btn.addEventListener('click', () => {
       faqItems.forEach((other) => {
-        if (other !== item) other.classList.remove('open');
+        const otherBtn = other.querySelector('.faq-q');
+        if (other !== item) {
+          other.classList.remove('open');
+          otherBtn?.setAttribute('aria-expanded', 'false');
+        }
       });
-      item.classList.toggle('open');
+      const isOpen = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(isOpen));
     });
   });
 
